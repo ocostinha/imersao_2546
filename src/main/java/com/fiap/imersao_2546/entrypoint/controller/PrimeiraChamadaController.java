@@ -1,7 +1,8 @@
-package com.fiap.imersao_2546;
+package com.fiap.imersao_2546.entrypoint.controller;
 
+import com.fiap.imersao_2546.entrypoint.controller.dto.UsuarioRequestDto;
+import com.fiap.imersao_2546.entrypoint.controller.dto.UsuarioResponseDto;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,10 +15,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/primeira_chamada")
-public class PrimeiraChamada {
-    @Autowired
-    private UsuarioRepository repository;
-
+public class PrimeiraChamadaController {
     @GetMapping
     @ResponseBody
     public ResponseEntity<String> primeiraChamada() {
@@ -26,20 +24,12 @@ public class PrimeiraChamada {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<ContratoSaida> primeiroPost(@Valid @RequestBody ContratoEntrada contratoEntrada) {
-        ContratoSaida contratoSaida = new ContratoSaida();
+    public ResponseEntity<UsuarioResponseDto> primeiroPost(@Valid @RequestBody UsuarioRequestDto usuarioRequestDto) {
+        UsuarioResponseDto usuarioResponseDto = new UsuarioResponseDto();
 
-        contratoSaida.setNomeCompleto(contratoEntrada.getNome() + " " + contratoEntrada.getSobrenome());
+        usuarioResponseDto.setNomeCompleto(usuarioRequestDto.getNome() + " " + usuarioRequestDto.getSobrenome());
 
-        Usuario usuario = new Usuario();
-
-        usuario.setNomeCompleto(contratoSaida.getNomeCompleto());
-
-        Usuario usuarioSalvo = repository.save(usuario);
-
-        contratoSaida.setId(usuarioSalvo.getId());
-
-        return ResponseEntity.ok(contratoSaida);
+        return ResponseEntity.ok(usuarioResponseDto);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
